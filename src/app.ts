@@ -3,6 +3,7 @@ import * as cors from 'cors';
 import * as logger from 'morgan';
 
 import { conectarSevidorNoBD } from "./config/db"
+import{ routerUsuario } from "./routes/usuario"
 
 /*
 cria a aplicação
@@ -28,3 +29,6 @@ app.use(logger('dev'));
 Conecta no BD
 */
 conectarSevidorNoBD();
+
+app.use('/usuario', routerUsuario);
+app.use('/', (req, res) => res.send('API do Desafio'));
