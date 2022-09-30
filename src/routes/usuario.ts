@@ -7,16 +7,64 @@ const usuarioCtrl = new UsuarioController();
 /*
 Serviço para salvar um novo usuário
 */
-routerUsuario.post('/', async (req, res) => {
+routerUsuario.post('/criar', async (req, res) => {
     const {name, email, senha} = req.body;
     const usuario = new Usuario(name, email, senha);
     const usuarioSalvo = await usuarioCtrl.salvar(usuario);
     res.json(usuarioSalvo);
 });
 /*
-Serviço recuperar usuarios
+Serviço listar usuarios
 */
-routerUsuario.get('/', async (req, res) => {
+routerUsuario.get('/listar', async (req, res) => {
     const usuarios = await usuarioCtrl.recuperaUsuario();
     res.json(usuarios);
+});
+/*
+Serviço listar apenas um usuario
+*/
+routerUsuario.get('/buscarUsuario/:id', async (req, res) => {
+    const id = Number(req.params.id);
+    const user = await usuarioCtrl.verificar(id);
+    if(user!=null){
+        console.log(user)    
+        
+        res.json(user);
+    }else{
+        res.send('Usuário não existe')
+    }
+});
+
+/*
+Serviço deletar usuario
+*/
+routerUsuario.delete('/delete/:id', async (req, res) => {
+   const user = await usuarioCtrl.delete(Number(req.params.id));
+    res.send();
+});
+
+/*
+Serviço editar usuario
+*/
+routerUsuario.put('/editar/:id', async (req, res) => {
+    const id = Number(req.params.id);
+    const {name,email,senha } = req.body;
+    const user = new Usuario(name, email,senha);
+    if(usuarioCtrl.verificar(id)!=null){
+        console.log(user)    
+        const a = await usuarioCtrl.editar(id, user);
+        res.send()
+    }
+ });
+
+
+ routerUsuario.get('/autenticar', async (req, res) => {
+    const {email,senha } = req.body;
+    const user = await usuarioCtrl.autenticar(email,senha);
+    if(user==null){
+        res.send('Email ou Senha inválidos');
+    }else{
+        res.json(user);
+    }
+        
 });
