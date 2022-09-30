@@ -27,8 +27,6 @@ routerUsuario.get('/buscarUsuario/:id', async (req, res) => {
     const id = Number(req.params.id);
     const user = await usuarioCtrl.verificar(id);
     if(user!=null){
-        console.log(user)    
-        
         res.json(user);
     }else{
         res.send('Usuário não existe')
@@ -40,7 +38,11 @@ Serviço deletar usuario
 */
 routerUsuario.delete('/delete/:id', async (req, res) => {
    const user = await usuarioCtrl.delete(Number(req.params.id));
-    res.send();
+   if(user!=null){   
+        res.json(user);
+    }else{
+        res.send('Usuário não existe')
+    }
 });
 
 /*
@@ -50,8 +52,7 @@ routerUsuario.put('/editar/:id', async (req, res) => {
     const id = Number(req.params.id);
     const {name,email,senha } = req.body;
     const user = new Usuario(name, email,senha);
-    if(usuarioCtrl.verificar(id)!=null){
-        console.log(user)    
+    if(usuarioCtrl.verificar(id)!=null){  
         const a = await usuarioCtrl.editar(id, user);
         res.send()
     }
